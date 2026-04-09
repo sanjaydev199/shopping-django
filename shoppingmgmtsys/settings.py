@@ -99,21 +99,30 @@ WSGI_APPLICATION = 'shoppingmgmtsys.wsgi.application'
  """
 
 
-DATABASES = {
-    #  'default': {
-    #      'ENGINE': 'django.db.backends.mysql',
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-       'NAME': BASE_DIR / 'db.sqlite3',
-        'NAME': 'smspythondb',
-         'USER': 'root',
-         'PASSWORD': '',
-         'HOST': 'localhost',
-         'PORT': '3306',
-     }
-}
+# DATABASES = {
+#     #  'default': {
+#     #      'ENGINE': 'django.db.backends.mysql',
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#        'NAME': BASE_DIR / 'db.sqlite3',
+#         'NAME': 'smspythondb',
+#          'USER': 'root',
+#          'PASSWORD': '',
+#          'HOST': 'localhost',
+#          'PORT': '3306',
+#      }
+# }
         
-    
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': os.environ.get("MYSQL_DATABASE"),
+        'USER': os.environ.get("MYSQL_USER"),
+        'PASSWORD': os.environ.get("MYSQL_PASSWORD"),
+        'HOST': os.environ.get("MYSQL_HOST"),
+        'PORT': '3306',
+    }
+}
 
 
 
