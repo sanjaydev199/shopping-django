@@ -1,0 +1,97 @@
+{% extends 'base1.html' %}
+{% block content %}
+<!-- Page Header Start -->
+    <!-- Page Header Start -->
+    <div class="container-fluid bg-secondary mb-5">
+        <div class="d-flex flex-column align-items-center justify-content-center" style="min-height: 300px">
+            <h1 class="font-weight-semi-bold text-uppercase mb-3">Search</h1>
+            <div class="d-inline-flex">
+                <p class="m-0"><a href="{% url 'shop' %}">Home</a></p>
+                <p class="m-0 px-2">-</p>
+                <p class="m-0">Search</p>
+            </div>
+        </div>
+    </div>
+    <!-- Page Header End -->
+
+
+    <!-- Shop Start -->
+    <div class="container-fluid pt-5">
+        <div class="row px-xl-5">
+            <!-- Shop Sidebar Start -->
+            
+            <!-- Shop Sidebar End -->
+
+            <h2>Search Against: {{query}}</h2>
+            
+            <!-- Shop Product Start -->
+            <div class="col-lg-9 col-md-12" style="padding-top: 20px;">
+                <div class="row pb-3">
+                    
+                 
+                    
+                    {% if searchprod %}
+                    {% for i in searchprod %}
+                    <div class="col-lg-4 col-md-6 col-sm-12 pb-1">
+                        <div class="card product-item border-0 mb-4">
+                            <div class="card-header product-img position-relative overflow-hidden bg-transparent border p-0">
+                                <img src="{{i.productimage1.url}}" alt="" height="200" width="250">
+                            </div>
+                            <div class="card-body border-left border-right text-center p-0 pt-4 pb-3">
+                                <h6 class="text-truncate mb-3">{{i.productname}}</h6>
+                                <div class="d-flex justify-content-center">
+                                    <h6>${{i.productpricebd}}</h6><h6 class="text-muted ml-2"><del>${{i.productprice}}</del></h6>
+                                </div>
+                            </div>
+                            <div class="card-footer d-flex justify-content-between bg-light border">
+                                <a href="{% url 'views_products_details' i.id %}" class="btn btn-sm text-dark p-0"><i class="fas fa-eye text-primary mr-1"></i>View Detail</a>
+                                <a href="{% url 'wishlist' i.id %}" class="btn btn-sm text-dark p-0"><i class="fas fa-heart text-primary mr-1"></i>Wishlist</a>
+                            </div>
+                        </div>
+                    </div>{% endfor %}
+                    
+                    {% else %}
+                    <div class="col-lg-4 col-md-6 single-exhibition">
+                        <p style="font-size: 20px; color: red;">No Product available.</p>
+                    </div>
+                    {% endif %}
+               
+                    
+                   
+                 
+                    <div class="col-12 pb-1">
+                        <nav aria-label="Page navigation">
+                            <ul class="pagination justify-content-center mb-3">
+                                {% if searchprod.has_previous %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="?query={{ query }}&page={{ searchprod.previous_page_number }}" aria-label="Previous">
+                                            <span aria-hidden="true">&laquo;</span>
+                                            <span class="sr-only">Previous</span>
+                                        </a>
+                                    </li>
+                                {% endif %}
+                        
+                                {% for num in searchprod.paginator.page_range %}
+                                    <li class="page-item {% if searchprod.number == num %}active{% endif %}">
+                                        <a class="page-link" href="?query={{ query }}&page={{ num }}">{{ num }}</a>
+                                    </li>
+                                {% endfor %}
+                        
+                                {% if searchprod.has_next %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="?query={{ query }}&page={{ searchprod.next_page_number }}" aria-label="Next">
+                                            <span aria-hidden="true">&raquo;</span>
+                                            <span class="sr-only">Next</span>
+                                        </a>
+                                    </li>
+                                {% endif %}
+                            </ul>
+                        </nav>
+                        
+                    </div>
+                    <!-- Pagination End -->
+                </div>
+            </div>
+            <!-- Shop Product End -->
+        </div>
+    </div>{% endblock %}

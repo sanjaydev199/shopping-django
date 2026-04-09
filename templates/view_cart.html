@@ -1,0 +1,142 @@
+ 
+ {% extends 'base1.html' %}
+ {% block content %}
+ <!-- Page Header Start -->
+    <div class="container-fluid bg-secondary mb-5">
+        <div class="d-flex flex-column align-items-center justify-content-center" style="min-height: 300px">
+            <h1 class="font-weight-semi-bold text-uppercase mb-3">Shopping Cart</h1>
+            <div class="d-inline-flex">
+                <p class="m-0"><a href="{% url 'shop' %}">Home</a></p>
+                <p class="m-0 px-2">-</p>
+                <p class="m-0">Shopping Cart</p>
+            </div>
+        </div>
+    </div>
+    <!-- Page Header End -->
+{% if messages %}
+                {% for message in messages %}
+                    {% if message.tags == 'error' %}
+                    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    {% elif message.tags == 'success' %}
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    {% endif %}
+                {% endfor %}
+                {% endif %}
+    <form method="POST" action="">
+        {% csrf_token %}
+    <!-- Cart Start -->
+    <div class="container-fluid pt-5">
+        <div class="row px-xl-5">
+            <div class="col-lg-8 table-responsive mb-5">
+                {% if cart_items %}
+                <table class="table table-bordered text-center mb-0">
+                    <thead class="bg-secondary text-dark">
+                        <tr>
+                            <th>Products</th>
+                            <th>Price(Per Unit)</th>
+                            <th>Shipping Charge</th>
+                            <th>Quantity</th>
+                            <th>Total</th>
+                            <th>Remove</th>
+                        </tr>
+                    </thead>
+
+                    <tbody class="align-middle">
+                        {% for item in cart_items %}
+                        <tr>
+                            <td class="align-middle"><img src="img/product-1.jpg" alt="" style="width: 50px;"> {{ item.product.productname }}</td>
+                            <td class="align-middle">${{ item.product.productprice }}</td>
+                            <td class="align-middle">${{ item.product.shippingcharge }}</td>
+                            <td class="align-middle">
+                                <div class="input-group quantity mx-auto" style="width: 100px;">
+
+                                    <input type="text" class="form-control form-control-sm bg-secondary text-center" value="{{ item.quantity }}">
+
+                                </div>
+                            </td>
+                            <td class="align-middle">${{ item.get_total_price }}</td>
+                            <td class="align-middle"><a href="{% url 'remove_from_cart' item.id %}" class="btn btn-danger btn-sm">
+                                <i class="fa fa-trash"></i>
+                            </a></td>
+                        </tr> {% endfor %}
+                     
+                   
+                 
+                   
+                    </tbody>
+                </table>
+                <div class="input-group-append" style="padding-top: 20px;">
+                    <a href="{% url 'shop' %}" class="btn btn-primary">Continue Shopping</a>
+                </div>
+
+            </div>
+            <div class="col-lg-4">
+              
+                 
+          
+                <div class="card border-secondary mb-5">
+                    <div class="card-header bg-secondary border-0">
+                        <h4 class="font-weight-semi-bold m-0">Cart Summary</h4>
+                    </div>
+                  
+                    <div class="card-footer border-secondary bg-transparent">
+                        <div class="d-flex justify-content-between mt-2">
+                            <h5 class="font-weight-bold">Grand Total</h5>
+                            <h5 class="font-weight-bold">{{total}}</h5>
+                        </div>
+                        <button class="btn btn-block btn-primary my-3 py-3" type="submit">Proceed To Checkout</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="container-fluid pt-5">
+        <div class="row px-xl-5">
+            <div class="col-lg-4">          
+                <div class="card border-secondary mb-5">
+                    <div class="card-header bg-secondary border-0">
+                        <h4 class="font-weight-semi-bold m-0">Shipping Address</h4>
+                        <textarea name="billing_address" id="billing_address" class="form-control" required></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">          
+                <div class="card border-secondary mb-5">
+                    <div class="card-header bg-secondary border-0">
+                        <h4 class="font-weight-semi-bold m-0">Billing Address</h4>
+                        <textarea name="shipping_address" id="shipping_address" class="form-control" required></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">          
+                <div class="card border-secondary mb-5">
+                    <div class="card-header bg-secondary border-0">
+                        <h4 class="font-weight-semi-bold m-0">Transaction Method</h4>
+                        <select name="transaction_method" id="transaction_method" class="form-control" required>
+                            <option value="">Payment Method</option>
+                            <option value="COD">COD</option>
+                            <option value="credit_card">Credit Card</option>
+                            <option value="paypal">PayPal</option>
+                            <option value="bank_transfer">Bank Transfer</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+           {% else %}
+
+                <h3 style="color:red">No Items in your cart</h3>{% endif %}
+        </div>
+    </div></form>
+    <!-- Cart End -->{% endblock %}

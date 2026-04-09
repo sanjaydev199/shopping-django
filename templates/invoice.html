@@ -1,0 +1,69 @@
+ 
+ {% extends 'base1.html' %}
+ {% block content %}
+ <!-- Page Header Start -->
+    <div class="container-fluid bg-secondary mb-5">
+        <div class="d-flex flex-column align-items-center justify-content-center" style="min-height: 300px">
+            <h1 class="font-weight-semi-bold text-uppercase mb-3">Invoice</h1>
+            <div class="d-inline-flex">
+                <p class="m-0"><a href="{% url 'shop' %}">Home</a></p>
+                <p class="m-0 px-2">-</p>
+                <p class="m-0">Invoice</p>
+            </div>
+        </div>
+    </div>
+    <!-- Page Header End -->
+
+  
+    <!-- Cart Start -->
+    <div class="container-fluid pt-5">
+        <div class="row px-xl-5">
+            <div class="col-lg-8 table-responsive mb-5">
+                <h1>Invoice #{{ order.id }}</h1>
+            <p>Date: {{ order.created_at }}</p>
+            <h2>Order Details</h2>
+            <p>Billing Address: {{ order.billing_address }}</p>
+            <p>Shipping Address: {{ order.shipping_address }}</p>
+            <p>Transaction Method: {{ order.transaction_method }}</p>
+
+            <h3>Items:</h3>
+                <table class="table table-bordered text-center mb-0">
+                    <thead class="bg-secondary text-dark">
+                        <tr>
+                            <th>Product</th>
+                            <th>Quantity</th>
+                            <th>Price (Per Unit)</th>
+                            <th>Shipping Charge</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+                    <tbody class="align-middle">
+                        {% for item in order_items %}
+                        <tr>
+                            <td>{{ item.product.productname }}</td>
+                            <td>{{ item.quantity }}</td>
+                            <td>${{ item.price }}</td>
+                            <td>${{ item.shipping_charge }}</td>
+                            <td>${{ item.get_total_item_price }}</td>
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td colspan="5">No items in this order.</td>
+                        </tr>
+                    {% endfor %}                   
+                 
+                   
+                    </tbody>
+                </table>
+                 
+                <br>
+                <div class="total">
+                    <h3>Total: ${{ total_price }}</h3>
+                </div>
+                 <a href="{% url 'order_history' %}" class="btn btn-primary">Back</a>
+            </div>
+            
+        </div>
+    </div>
+
+    <!-- Cart End -->{% endblock %}

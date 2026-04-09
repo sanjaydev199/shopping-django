@@ -1,0 +1,103 @@
+{% extends 'base1.html' %}
+{% block content %}
+<!-- Page Header Start -->
+    <div class="container-fluid bg-secondary mb-5">
+        <div class="d-flex flex-column align-items-center justify-content-center" style="min-height: 300px">
+            <h1 class="font-weight-semi-bold text-uppercase mb-3">Registration</h1>
+            <div class="d-inline-flex">
+                <p class="m-0"><a href="">Home</a></p>
+                <p class="m-0 px-2">-</p>
+                <p class="m-0">Signup</p>
+            </div>
+        </div>
+    </div>
+    <!-- Page Header End -->
+
+    <div class="container-fluid pt-5">
+        <div class="text-center mb-4">
+            <h2 class="section-title px-5"><span class="px-2">Register with us!!</span></h2>
+        </div>
+        <div class="row px-xl-5">
+            <div class="col-lg-7 mb-5">
+                <div class="contact-form">
+                    <div id="success"></div>
+                    
+            {% if messages %}
+            {% for message in messages %}
+             {% if message.tags == 'error' %}
+           <div class="alert alert-warning alert-dismissible fade show" role="alert" style="color: red;">
+          {{message}}
+         <button type="button" class="close" data-dismiss="alert" aria-label="Close" style="color: red;">
+         <span aria-hidden="true">&times;</span>
+             </button>
+              </div>
+           {% endif %}
+            {% endfor %}
+           {% endif %}
+               {% if messages %}
+            {% for message in messages %}
+             {% if message.tags == 'success' %}
+           <div class="alert alert-warning alert-dismissible fade show" role="alert" style="color: red;">
+          {{message}}
+         <button type="button" class="close" data-dismiss="alert" aria-label="Close" style="color: red;">
+         <span aria-hidden="true">&times;</span>
+             </button>
+              </div>
+           {% endif %}
+            {% endfor %}
+           {% endif %}
+                    <form method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="control-group">
+                            <label style="font-weight: bolder;">Profile Pic:</label>
+                            <input type="file" class="form-control" id="profile_pic" name="profile_pic"
+                                required="required"/>
+                            <p class="help-block text-danger"></p>
+                        </div>
+                        <div class="control-group">
+                            <label style="font-weight: bolder;">First Name:</label>
+                            <input type="text" class="form-control" id="first_name" name="first_name" placeholder="Your First Name"
+                                required="required">
+                            <p class="help-block text-danger"></p>
+                        </div>
+                        <label style="font-weight: bolder;">Last Name:</label>
+                        <div class="control-group">
+                            <input type="text" class="form-control" id="last_name" name="last_name" placeholder="Your Last Name"
+                                required="required"/>
+                            <p class="help-block text-danger"></p>
+                        </div>
+                        <label style="font-weight: bolder;">Email:</label>
+                        <div class="control-group">
+                            <input type="email" class="form-control" id="email" name="email" placeholder="Your Email"
+                                required="required"/>
+                            <p class="help-block text-danger"></p>
+                        </div>
+                        <label style="font-weight: bolder;">Mobile Number:</label>
+                        <div class="control-group">
+                            <input type="text" class="form-control" id="mobilenumber" name="mobilenumber"  placeholder="Enter Mobile Number"
+                                required="required" maxlength="10" pattern="[0-9]+"/>
+                            <p class="help-block text-danger"></p>
+                        </div>
+                        <label style="font-weight: bolder;">Username:</label>
+                        <div class="control-group">
+                            <input type="text" class="form-control" id="username" name="username" placeholder="Enter Username"
+                                required="required"/>
+                            <p class="help-block text-danger"></p>
+                        </div>
+                        <label style="font-weight: bolder;">Password:</label>
+                        <div class="control-group">
+                            <input type="password" class="form-control" id="password" name="password" placeholder="Enter Password"
+                                required="required"/>
+                            <p class="help-block text-danger"></p>
+                        </div>
+                        
+                        <div>
+                            <button class="btn btn-primary py-2 px-4" type="submit" id="sendMessageButton">Submit</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+ 
+        </div>
+    </div>
+    {% endblock %}

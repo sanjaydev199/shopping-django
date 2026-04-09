@@ -1,0 +1,66 @@
+
+{% load static %}
+      <!-- partial:partials/_navbar.html -->
+      <nav class="navbar default-layout-navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
+        <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
+          <a class="navbar-brand brand-logo" href="{% url 'dashboard' %}">
+            <h4 style="color: wheat;"> Online Shopping</h4>
+          </a>
+          <a class="navbar-brand brand-logo-mini" href="{% url 'dashboard' %}"><img src="{% static 'assets/images/logo-mini.svg'%}" alt="logo" /></a>
+          <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
+            <span class="icon-menu"></span>
+          </button>
+        </div>
+        <div class="navbar-menu-wrapper d-flex align-items-center">
+          <h5 class="mb-0 font-weight-medium d-none d-lg-flex">Welcome Admin dashboard!</h5>
+          <ul class="navbar-nav navbar-nav-right">
+           
+           
+          
+            <li class="nav-item dropdown">
+              <a class="nav-link count-indicator message-dropdown" id="messageDropdown" href="#" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="icon-bell"></i>
+                <span class="count" style="color: black;font-size: 15px;">{{new_order.count}}</span>
+              </a>
+              <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list pb-0" aria-labelledby="messageDropdown">
+               <a class="dropdown-item py-3" href="{% url 'new_order' %}">
+  <p class="mb-0 font-weight-medium float-start me-2">You have {{ new_order|length }} new orders </p>
+  <span class="badge badge-pill badge-primary float-end">View all</span>
+</a>
+                <div class="dropdown-divider"></div>
+                {% for i in new_order %}
+                <a class="dropdown-item preview-item" href="{% url 'view_order_detail' i.id %}">
+                  <div class="preview-thumbnail">
+                    <img src="{{i.reguser.admin.profile_pic.url}}" alt="image" class="img-sm profile-pic">
+                  </div>
+                  <div class="preview-item-content flex-grow py-2">
+                    <p class="preview-subject ellipsis font-weight-medium text-dark">{{ i.reguser.admin.first_name }} {{ i.reguser.admin.last_name }} </p>
+                    <p class="font-weight-light small-text"> Date: {{ i.created_at }} </p>
+                  </div>
+                </a>{% endfor %}
+             
+              </div>
+            </li>
+      
+            <li class="nav-item dropdown d-none d-xl-inline-flex user-dropdown">
+              <a class="nav-link dropdown-toggle" id="UserDropdown" href="#" data-bs-toggle="dropdown" aria-expanded="false">
+                {% if user.profile_pic %}
+                <img class="img-xs rounded-circle ms-2" src="{{user.profile_pic.url}}" alt="Profile image"> <span class="font-weight-normal">{% else %} <img class="img-xs rounded-circle ms-2" src="{% static 'assets/imgages/admin-avatar.png' %}" alt="Profile image">{% endif %} {{user.first_name}} {{user.last_name}} </span></a>
+              <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="UserDropdown">
+                <div class="dropdown-header text-center">
+                  <img class="img-md rounded-circle" src="{{user.profile_pic.url}}" alt="Profile image" width="100" height="100">
+                  <p class="mb-1 mt-3">{{user.first_name}} {{user.last_name}}</p>
+                  <p class="font-weight-light text-muted mb-0">{{user.email}}</p>
+                </div>
+                <a class="dropdown-item" href="{% url 'admin_profile' %}"><i class="dropdown-item-icon icon-user text-primary"></i> My Profile</a>
+                <a class="dropdown-item" href="{% url 'change_password' %}"><i class="dropdown-item-icon icon-speech text-primary"></i> Change Password</a>
+                
+                <a class="dropdown-item" href="{% url 'logout' %}"><i class="dropdown-item-icon icon-power text-primary"></i>Sign Out</a>
+              </div>
+            </li>
+          </ul>
+          <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button" data-toggle="offcanvas">
+            <span class="icon-menu"></span>
+          </button>
+        </div>
+      </nav>

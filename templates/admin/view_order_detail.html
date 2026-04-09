@@ -1,0 +1,168 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="row">
+    <div class="col-lg-12 stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Order Details</h4>
+                
+                {% if messages %}
+                {% for message in messages %}
+                    {% if message.tags == 'error' %}
+                    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    {% elif message.tags == 'success' %}
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    {% endif %}
+                {% endfor %}
+                {% endif %}
+                
+                <div class="table-responsive">
+                    <h1>Order #{{ order.id }} - {{ order.created_at }}</h1>
+                    <p>Billing Address: {{ order.billing_address }}</p>
+                    <p>Shipping Address: {{ order.shipping_address }}</p>
+                    <p>Transaction Method: {{ order.transaction_method }}</p>
+                    <p>Total Price: ${{ total_price }}</p>
+                    
+                    <h3>Items:</h3>
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Product</th>
+                                <th>Quantity</th>
+                                <th>Price (Per Unit)</th>
+                                <th>Shipping Charge</th>
+                                <th>Total</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in order_items %}
+                            <tr>
+                                <td>{{ item.product.productname }}</td>
+                                <td>{{ item.quantity }}</td>
+                                <td>${{ item.price }}</td>
+                                <td>${{ item.shipping_charge }}</td>
+                                <td>${{ item.get_total_item_price }}</td>
+                                <td>
+                                    {% if item.status %}
+                                    {{ item.status }}
+                                    {% else %}
+                                    Status not updated
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="6">No items in this order.</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    
+                    <br>
+                    
+                    <h3>User Details:</h3>
+                    <table class="table table-bordered">
+                        <tr>
+                            <th>Name</th>
+                            <td>{{ order.reguser.admin.first_name }} {{ order.reguser.admin.last_name }}</td>
+                            <th>Contact Number</th>
+                            <td>{{ order.reguser.mobilenumber }}</td>
+                            <th>Email</th>
+                            <td>{{ order.reguser.admin.email }}</td>
+                        </tr>
+                    </table>
+                    
+                    <br>
+                    
+                    <h3>Order History:</h3>
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Remark</th>
+                                <th>Status</th>
+                                <th>Updation Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for track in tracking_history %}
+                            
+                            <tr>
+                                <td>{{ forloop.counter }}</td>
+                               
+                                <td>{{ track.remark }}</td>
+                                <td>{{ track.status }}</td>
+                                <td>{{ track.updated_at }}</td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="4">No tracking history found.</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    
+                    <br>
+                    
+                    {% if has_pending_items %}
+                    <h3>Update Order Status:</h3>
+                   
+                    <form method="POST" action="{% url 'update_order' order.id %}">
+                        {% csrf_token %}
+                        <table class="table table-bordered">
+                            <tr>
+                                <th>Remark:</th>
+                                <td>
+                                    <textarea name="remark" placeholder="Remark" rows="4" cols="50" class="form-control" required></textarea>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Status:</th>
+                                {% with first_item=order_items.0 %}
+    <td>
+        <select name="status" class="form-control" required>
+            <option value="">Choose Status</option>
+            
+            {% if first_item.status == "" %}
+                <option value="Inprocess">Inprocess</option>
+                <option value="Dispatch">Dispatch</option>
+                <option value="Cancel">Cancel</option>
+                <option value="Delivered">Delivered</option>
+            {% elif first_item.status == "Inprocess" %}
+                <option value="Dispatch">Dispatch</option>
+                <option value="Cancel">Cancel</option>
+                <option value="Delivered">Delivered</option>
+            {% elif first_item.status == "Dispatch" %}
+                <option value="Delivered">Delivered</option>
+            {% endif %}
+        </select>
+    </td>
+{% endwith %}
+                            </tr>
+                        </table>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="submit" name="submit" class="btn btn-primary">Update</button>
+                        </div>
+                    </form>
+                  
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

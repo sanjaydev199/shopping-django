@@ -1,0 +1,116 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="row">
+
+    <div class="col-lg-12 stretch-card">
+      <div class="card">
+        <div class="card-body">
+          <h4 class="card-title">Review Details</h4>
+          {% if messages %}
+          {% for message in messages %}
+           {% if message.tags == 'error' %}
+          <div class="alert alert-warning alert-dismissible fade show" role="alert">
+          {{message}}
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+           </button>
+            </div>
+          {% endif %}
+          {% endfor %}
+          {% endif %}
+             {% if messages %}
+          {% for message in messages %}
+           {% if message.tags == 'success' %}
+          <div class="alert alert-warning alert-dismissible fade show" role="alert">
+          {{message}}
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+           </button>
+            </div>
+          {% endif %}
+          {% endfor %}
+          {% endif %}
+          <div class="table-responsive">
+            <table class="table table-bordered">
+                {% for i in view_rev %}   
+                <tr>
+                    <th>Name</th>
+                       <td colspan="3">{{i.name }}</td>
+                       <th>Email</th>
+                       <td>{{i.email }}</td>
+                       </tr> 
+<tr>
+                   
+                 
+                    <th>Product Name</th>
+                       <td colspan="8">{{i.prod_id.productname }}<br />
+                        <a href="{% url 'views_products' i.prod_id.id %}" target="_blank">View Details</a>
+                       </td>
+                       </tr>  
+                       <tr>
+                    <th>Review</th>
+                       <td colspan="4">{{i.review}}</td>
+
+                    <th>Review Date</th>
+                       <td colspan="4">{{i.posted_date }}</td>
+                     </tr>
+             
+                       <tr>
+                     
+
+<th>Status</th>
+<td colspan="8"> {% if i.status %}
+    {% if i.status == 'Approved' %}
+       Approved
+    {% elif i.status == 'Unapproved' %}
+       Unapproved
+    {% endif %}
+{% else %}
+    Not Action Taken Yet
+{% endif %}</td>
+</tr>
+
+            </table>
+            <br>
+           
+            {% if i.status == 0 or i.status == None or i.status == '' %}
+              <div class="modal-dialog">
+                <div class="modal-content">
+                 
+                  <div class="modal-body">
+                      <form method="POST" action="{% url 'update-reviews-status' %}">
+                        <input type="hidden" value="{{ i.id }}" name="rev_id" id="rev_id" class="form-control" required="">
+                          {% csrf_token %}
+                          <div class="modal-body">
+                           
+                          <table class="table table-bordered table-hover data-tables">
+                              <tr>
+                                  <th>Status :</th>
+                                  <td>
+                                      <select  class="form-control" required="true" name="status">
+                                      <option value="">Select Status</option>
+                                      <option value="Approved">Approved</option>
+                                      <option value="Unapproved">Unapproved</option></select>
+                                  </td>
+                              </tr> 
+                             
+                          </table>
+                          </div>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Update</button>
+                  </div></form>
+                </div>
+              </div>{% endif %}
+            
+       
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {% endfor %}
+{% endblock %}

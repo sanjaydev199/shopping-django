@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% block content %}
+
+  <div class="row">
+ 
+    
+    <div class="col-12 grid-margin stretch-card">
+      <div class="card">
+        <div class="card-body">
+          <h4 class="card-title" style="color: blue;">Update Brand</h4>
+          <hr>
+          {% if messages %}
+          {% for message in messages %}
+           {% if message.tags == 'error' %}
+          <div class="alert alert-warning alert-dismissible fade show" role="alert">
+          {{message}}
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+           </button>
+            </div>
+          {% endif %}
+          {% endfor %}
+          {% endif %}
+             {% if messages %}
+          {% for message in messages %}
+           {% if message.tags == 'success' %}
+          <div class="alert alert-warning alert-dismissible fade show" role="alert">
+          {{message}}
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+           </button>
+            </div>
+          {% endif %}
+          {% endfor %}
+          {% endif %}
+          <form class="forms-sample" method="POST" enctype="multipart/form-data" action="{% url 'update_brand_details' %}">
+            {% csrf_token %}
+           
+            <div class="form-group">
+                <label for="inputEmail4" class="form-label">Brand Name</label>
+                <input type="text"  class="form-control" name="brandname"  value="{{brand.brandname}}">
+                <input type="hidden"  class="form-control" name="bid" id="bid" value="{{brand.id}}">
+            </div>
+            <div class="form-group">
+                <label for="inputPassword4" class="form-label">Old Brand Logo</label>
+                
+                {% if brand.brandlogo %}
+                <img src="{{ brand.brandlogo.url }}" width="200" height="200">
+            {% else %}
+                <p>No logo available</p>
+            {% endif %}
+            </div>
+            <div class="form-group">
+                <label for="inputPassword4" class="form-label">New Brand Logo</label>
+                
+                <input type="file" class="form-control" name="brandlogo" >
+            </div>
+            <button type="submit" class="btn btn-primary me-2">Submit</button>
+           
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>{% endblock %}

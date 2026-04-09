@@ -1,0 +1,180 @@
+{% extends 'base.html' %}
+{% block content %}
+
+  <div class="row">
+ 
+    
+    <div class="col-12 grid-margin stretch-card">
+      <div class="card">
+        <div class="card-body">
+          <h4 class="card-title" style="color: blue;">Update Products</h4>
+          <hr>
+          {% if messages %}
+          {% for message in messages %}
+           {% if message.tags == 'error' %}
+          <div class="alert alert-warning alert-dismissible fade show" role="alert">
+          {{message}}
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+           </button>
+            </div>
+          {% endif %}
+          {% endfor %}
+          {% endif %}
+             {% if messages %}
+          {% for message in messages %}
+           {% if message.tags == 'success' %}
+          <div class="alert alert-warning alert-dismissible fade show" role="alert">
+          {{message}}
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+           </button>
+            </div>
+          {% endif %}
+          {% endfor %}
+          {% endif %}
+        <form class="forms-sample" method="POST" enctype="multipart/form-data" action="{% url 'updates_products' %}">
+    {% csrf_token %}
+   
+    <div class="form-group">
+        <label for="inputEmail4" class="form-label">Category</label>
+        <select class="form-select" aria-label="Default select example" name="cat_id" id="category">
+            <option value="{{prod.cat_id.id}}">{{prod.cat_id.catname}}</option>
+            {% for i in categories %}
+            <option value="{{i.id}}">{{i.catname}}</option>{% endfor %}
+           
+          </select>
+    </div>
+    <input type="hidden" name="pro_id" id="pro_id" class="form-control" value="{{prod.id}}">
+    <div class="form-group">
+        <label for="inputPassword4" class="form-label">Subcategory</label>
+        <select class="form-select" aria-label="Default select example" name="subcat_id" id="subcategory">
+        
+            <option value="{{prod.subcategory_id.id}}">{{prod.subcategory_id.subcatname}}</option>
+            <option value="">Select Subcategory</option>
+          </select>
+    </div>
+    <div class="form-group">
+        <label for="inputPassword4" class="form-label">Product Name</label>
+        
+        <input type="text" name="productname" class="form-control" value="{{prod.productname}}">
+    </div>
+    <div class="form-group">
+        <label for="inputEmail4" class="form-label">Brand</label>
+        <select class="form-select" aria-label="Default select example" name="brand_id">
+            <option value="{{prod.brand_id.id}}">{{prod.brand_id.brandname}}</option>
+            {% for i in brands %}
+            <option value="{{i.id}}">{{i.brandname}}</option>{% endfor %}
+           
+          </select>
+    </div>
+    <div class="form-group">
+        <label for="inputPassword4" class="form-label">Price Before Discount</label>
+        
+        <input type="text" name="productpricebd" value="{{prod.productpricebd}}" class="form-control">
+    </div>
+    <div class="form-group">
+        <label for="inputPassword4" class="form-label">Price After Discount(Selling Price)</label>
+        
+        <input type="text" name="productprice" value="{{prod.productprice}}" class="form-control">
+    </div>
+    <div class="form-group">
+        <label for="inputPassword4" class="form-label">Product Description</label>
+        
+        <textarea  name="description"  rows="6" class="form-control">{{prod.description}}</textarea>
+    </div>
+    <div class="form-group">
+        <label for="inputPassword4" class="form-label">Shipping Charge</label>
+        
+        <input type="text" name="shippingcharge" value="{{prod.shippingcharge}}" class="form-control">
+    </div>
+    <div class="form-group">
+        <label for="inputPassword4" class="form-label">Product Availability</label>
+        
+        <select   name="productavailability"  class="form-control">
+            <option value="{{prod.productavailability}}">{{prod.productavailability}}</option>
+            <option value="In Stock">In Stock</option>
+            <option value="Out of Stock">Out of Stock</option>
+            </select>
+            </select>
+    </div>
+    <div class="form-group">
+        <label for="inputPassword4" class="form-label">Old Product Featured Image</label>
+        
+        {% if prod.productimage1 %}
+            <img src="{{ prod.productimage1.url }}" width="200" height="200">
+        {% else %}
+            <p>No image available</p>
+          
+        {% endif %}
+    </div>
+    <div class="form-group">
+        <label for="inputPassword4" class="form-label">Product Featured Image</label>
+        
+        <input type="file" name="productimage1" id="productimage1" class="form-control" accept="image/*" title="Accept images only">
+    </div>
+    <div class="form-group">
+        <label for="inputPassword4" class="form-label">Old Product Image 2</label>
+        
+        {% if prod.productimage2 %}
+            <img src="{{ prod.productimage2.url }}" width="200" height="200">
+        {% else %}
+            <p>No image available</p>
+       
+        {% endif %}
+    </div>
+    <div class="form-group">
+        <label for="inputPassword4" class="form-label">Product Image 2</label>
+        
+        <input type="file" name="productimage2" id="productimage2" class="form-control" accept="image/*" title="Accept images only">
+    </div>
+    <div class="form-group">
+        <label for="inputPassword4" class="form-label">Old Product Image 3</label>
+        
+        {% if prod.productimage3 %}
+            <img src="{{ prod.productimage3.url }}" width="200" height="200">
+        {% else %}
+            <p>No image available</p>
+         
+        {% endif %}
+    </div>
+    <div class="form-group">
+        <label for="inputPassword4" class="form-label">Product Image 3</label>
+        
+        <input type="file" name="productimage3" id="productimage3" class="form-control" accept="image/*" title="Accept images only">
+    </div>
+    <button type="submit" class="btn btn-primary me-2">Submit</button>
+</form>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>
+   $(document).ready(function() {
+      $('#category').change(function() {
+          var cid = $(this).val();
+          $.ajax({
+              url: '/get_subcat/',
+              type: 'GET',
+              data: {
+                  'c_id': cid
+              },
+              success: function(data) {
+                  
+                  var subcatoptions = data.subcat_options;
+                  
+                  $('#subcategory').html(subcatoptions);
+              },
+              error: function(xhr, status, error) {
+                  console.error(xhr.responseText);
+                
+              }
+          });
+      });
+  });
+  
+      </script>
+      
+  {% endblock %}

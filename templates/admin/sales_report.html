@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="row">
+    <div class="col-lg-12 stretch-card">
+      <div class="card">
+        <div class="card-body">
+          <h4 class="card-title">Sales Report</h4>
+
+          <!-- Displaying Messages -->
+          {% if messages %}
+            {% for message in messages %}
+              <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+            {% endfor %}
+          {% endif %}
+
+          <!-- Search Form -->
+          <form method="POST">
+            {% csrf_token %}
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label" style="font-weight: bolder;">Start Date:</label>
+                <div class="col-sm-10">
+                    <input type="date" id="start_date" name="start_date" class="form-control" required>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label" style="font-weight: bolder;">End Date:</label>
+                <div class="col-sm-10">
+                    <input type="date" id="end_date" name="end_date" class="form-control" required>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-sm-10">
+                    <button type="submit" class="btn btn-dark">Generate Report</button>
+                </div>
+            </div>
+        </form>
+        {% if order_data %}
+        <h3>Sales Report from {{ start_date }} to {{ end_date }}</h3>
+          <!-- Order Search Results -->
+         
+          <div class="table-responsive">
+            <table class="table table-bordered">
+              <thead>
+                <tr>
+                    <th>Order ID</th>
+                    <th>Customer</th>
+                    <th>Total Quantity</th>
+                    <th>Total Price</th>
+                    <th>Total Shipping</th>
+                    <th>Order Date</th>
+                  </tr>
+              </thead>
+              <tbody>
+                {% for data in order_data %}
+                <tr>
+                    <td>{{ data.order.id }}</td>
+                    <td>{{ data.order.reguser.admin.first_name }} {{ data.order.reguser.admin.last_name }}</td>
+                    <td>{{ data.total_quantity }}</td>
+                    <td>{{ data.total_price }}</td>
+                    <td>{{ data.total_shipping }}</td>
+                    <td>{{ data.order.created_at }}</td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+
+            <!-- Pagination Links -->
+        
+          </div>
+          <h4 style="padding-top: 20px;">Total Sales Summary:</h4>
+          <p>Total Quantity Sold: {{ overall_quantity }}</p>
+          <p>Total Revenue: {{ overall_price }}</p>
+          <p>Total Shipping Charges: {{ overall_shipping }}</p>
+          
+          {% endif %}
+
+        </div>
+      </div>
+    </div>
+</div>
+
+{% endblock %}
